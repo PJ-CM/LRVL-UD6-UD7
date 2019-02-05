@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
@@ -106,5 +107,17 @@
                 </div>
             </div>
         </div>
+
+        {{-- jQuery, Bootstrap --}}
+        <script src="{{ asset('js/app.js') }}"></script>
+
+
+        {{-- Si la cookie aún no existe o hay errores a la hora de guardarla --}}
+        @if (Cookie::get('chck_cookie_ok') == null || count($errors) > 0)
+        @include('inc.modal_accion_cookie')
+        <script type="text/javascript">
+            $("#accion-modal-cookie").modal('show');
+        </script>
+        @endif
     </body>
 </html>

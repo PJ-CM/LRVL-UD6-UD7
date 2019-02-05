@@ -5,10 +5,22 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //Obligar a iniciar sesión para acceder
+        $this->middleware(['auth']);
+    }
+
     protected $valores_tipo = 'user';
 
     /**
@@ -131,67 +143,75 @@ class UserController extends Controller
     ////public function update(Request $request, User $user)
     public function update(Request $request)
     {
-        //Estableciendo reglas de validación
-        /*$reglas = [
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'activo' => 'required|in:0,1',
-        ];*/
-        $reglas = [
-            'name' => 'required|string|max:255',
-            //  >> Sin ignorar el valor del campo del registro [ID] pasado
-            //      => [1d2]
-            //'username' => ['required', 'string', 'max:255', 'unique:users'],
-            //      => [2d2]
-            //'username' => 'required|string|max:255|unique:users',
-            //  >> Ignorando el valor del campo del registro [ID] pasado
-            //      => [1d2]
-            //          -> necesario importar la class de Rule (ver parte superior de este archivo)
-            ////'username' => [
-            ////    'required', 'string', 'max:255',
-            ////    Rule::unique('users')->ignore($request->id),
-            ////],
-            //      => [2d2]
-            //          -> |unique:tabla_nombre,nombre_campo_implicado,ID_registro_ignorar
-            'username' => 'required|string|max:255|unique:users,username,' . $request->id,
-            // ------------------------------------------------------------------------------
-            //  >> Sin ignorar el valor del campo del registro [ID] pasado
-            //      => [1d2]
-            //'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            //      => [2d2]
-            //'email' => 'required|string|email|max:255|unique:users',
-            //  >> Ignorando el valor del campo del registro [ID] pasado
-            //      => [1d2]
-            //          -> necesario importar la class de Rule (ver parte superior de este archivo)
-            ////'email' => [
-            ////    'required', 'string', 'email', 'max:255',
-            ////    Rule::unique('users')->ignore($request->id),
-            ////],
-            //      => [2d2]
-            //          -> |unique:tabla_nombre,nombre_campo_implicado,ID_registro_ignorar
-            'email' => 'required|string|email|max:255|unique:users,email,' . $request->id,
-            'activo' => 'required|in:0,1',
-        ];
-        //Validando petición
-        $request->validate($reglas);
+        //Demandar ser ADMIN para poder ACTUALIZAR
+        ////$this->authorize('isAdmin');
 
-        //[1d2] Operación masiva contando con los campos especificados en el $fillable del modelo
-        //User::where('id', $request->id)
-        //        ->update($request->except('_token'));
-        //[2d2] Operación detallada especificando, solamente, el o los campos a modificar
-        $valor = User::findOrFail($request->id);
-        $valor->name = $request->name;
-        $valor->username = $request->username;
-        $valor->direction = $request->direction;
-        $valor->phone = $request->phone;
-        $valor->country = $request->country;
-        $valor->email = $request->email;
-        $valor->activo = $request->activo;
-        $valor->save();
+        //Cuando el usuario sea de perfil ADMIN o AUTHOR
+        if (Gate::allows('isAdmin') || Gate::allows('isAuthor')) {
 
-        $accion = 'editar_' . $request->id;
-        return redirect()->route('users_lista', ['accion' => $accion]);
+            //Estableciendo reglas de validación
+            /*$reglas = [
+                'name' => 'required|string|max:255',
+                'username' => 'required|string|max:255|unique:users',
+                'email' => 'required|string|email|max:255|unique:users',
+                'activo' => 'required|in:0,1',
+            ];*/
+            $reglas = [
+                'name' => 'required|string|max:255',
+                //  >> Sin ignorar el valor del campo del registro [ID] pasado
+                //      => [1d2]
+                //'username' => ['required', 'string', 'max:255', 'unique:users'],
+                //      => [2d2]
+                //'username' => 'required|string|max:255|unique:users',
+                //  >> Ignorando el valor del campo del registro [ID] pasado
+                //      => [1d2]
+                //          -> necesario importar la class de Rule (ver parte superior de este archivo)
+                ////'username' => [
+                ////    'required', 'string', 'max:255',
+                ////    Rule::unique('users')->ignore($request->id),
+                ////],
+                //      => [2d2]
+                //          -> |unique:tabla_nombre,nombre_campo_implicado,ID_registro_ignorar
+                'username' => 'required|string|max:255|unique:users,username,' . $request->id,
+                // ------------------------------------------------------------------------------
+                //  >> Sin ignorar el valor del campo del registro [ID] pasado
+                //      => [1d2]
+                //'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                //      => [2d2]
+                //'email' => 'required|string|email|max:255|unique:users',
+                //  >> Ignorando el valor del campo del registro [ID] pasado
+                //      => [1d2]
+                //          -> necesario importar la class de Rule (ver parte superior de este archivo)
+                ////'email' => [
+                ////    'required', 'string', 'email', 'max:255',
+                ////    Rule::unique('users')->ignore($request->id),
+                ////],
+                //      => [2d2]
+                //          -> |unique:tabla_nombre,nombre_campo_implicado,ID_registro_ignorar
+                'email' => 'required|string|email|max:255|unique:users,email,' . $request->id,
+                'activo' => 'required|in:0,1',
+            ];
+            //Validando petición
+            $request->validate($reglas);
+
+            //[1d2] Operación masiva contando con los campos especificados en el $fillable del modelo
+            //User::where('id', $request->id)
+            //        ->update($request->except('_token'));
+            //[2d2] Operación detallada especificando, solamente, el o los campos a modificar
+            $valor = User::findOrFail($request->id);
+            $valor->name = $request->name;
+            $valor->username = $request->username;
+            $valor->direction = $request->direction;
+            $valor->phone = $request->phone;
+            $valor->country = $request->country;
+            $valor->email = $request->email;
+            $valor->activo = $request->activo;
+            $valor->save();
+
+            $accion = 'editar_' . $request->id;
+            return redirect()->route('users_lista', ['accion' => $accion]);
+
+        }//fin de es ADMIN o AUTHOR
     }
 
     /**
@@ -203,6 +223,9 @@ class UserController extends Controller
     ////public function update_campo(User $user)
     public function update_campo($id, $campo, $valor)
     {
+        //Demandar ser ADMIN para poder ACTUALIZAR ESTE CAMPO
+        $this->authorize('isAdmin');
+
         User::where('id', $id)
                 ->update([
                     $campo => $valor,
@@ -221,6 +244,9 @@ class UserController extends Controller
     ////public function destroy(User $user)
     public function destroy($id)
     {
+        //Demandar ser ADMIN para poder ELIMINAR
+        $this->authorize('isAdmin');
+
         User::where('id', $id)->delete();
 
         //Redirigiendo al Listado

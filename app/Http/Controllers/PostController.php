@@ -8,6 +8,17 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //Obligar a iniciar sesión para acceder
+        $this->middleware(['auth']);
+    }
+
     protected $valores_tipo = 'post';
 
     /**

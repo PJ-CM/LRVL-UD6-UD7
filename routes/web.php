@@ -15,6 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//Guardar Cookie-Session
+Route::post('/store-cookie', 'CookieSessionController@storeCookie')
+    ->name('store_cookie');
+Route::post('/store-session', 'CookieSessionController@storeSession')
+    ->name('store_session');
+
 /*
     De forma general, a modo de controlador de recurso
 *//*

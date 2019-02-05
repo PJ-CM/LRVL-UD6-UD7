@@ -86,8 +86,12 @@
                                                     <th>NICK</th>
                                                     <th>Email</th>
                                                     <th>Fecha Registro</th>
+                                                    {{-- Solo si el usuario autenticado
+                                                        que accede es ADMIN --}}
+                                                    @can('isAdmin')
                                                     <th>Activo</th>
                                                     <th>Modificar</th>
+                                                    @endcan
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -117,6 +121,10 @@
                                                     <td>{{ $valor->username }}</td>
                                                     <td>{{ $valor->email }}</td>
                                                     <td>{{ $valor->created_at }}</td>
+
+                                            {{-- Solo si el usuario autenticado
+                                                que accede es ADMIN --}}
+                                                @can('isAdmin')
                                                     @php
                                                         $valor_activo_tit = '';
                                                         $valor_activo_nuevo = '';
@@ -130,6 +138,7 @@
                                                     @endphp
                                                     <td><form action="{{ route('users_editar_campo', ['id' => $valor->id, 'campo' => 'activo', 'valor' => $valor_activo_nuevo]) }}" method="get"><input type="checkbox"{{ $valor->activo == 1 ? ' checked' : '' }} onchange="this.form.submit();" title="{{ $valor_activo_tit }}"></form></td>
                                                     <td><a href="{{ route('users_detalle', ['id' => $valor->id]) }}" class="text-primary" title="Editar este registro"><i class="fas fa-pencil-alt"></i></a> <a href="javascript: void(0);" class="text-danger" title="Borrar este registro" data-toggle="modal" data-target="#confirmModal_{{ $valor->id }}"><i class="fas fa-trash-alt"></i></a></td>
+                                                @endcan
                                                 </tr>
 
                                                     {{-- CON Paginación [DESC] --}}
@@ -264,14 +273,22 @@
                                         --}}
                                         <div class="form-group text-right">
                                             <a href="{{ route('users_lista') }}" title="Volver al listado" class="mr-3">Volver al listado</a>
+
+                                    {{-- Solo si el usuario autenticado
+                                        no es USER (osea, los que sean ADMIN o AUTHOR si podrán --}}
+                                        @cannot('isUser')
                                             <input type="hidden" name="id" value="{{ $valor->id }}">
                                             <button class="btn btn-primary" type="submit" title="Editar registro">Editar</button>
+                                        @endcannot
+                                    {{-- Solo si el usuario autenticado es ADMIN --}}
+                                        @can('isAdmin')
                                             <button class="btn btn-danger" type="button" title="Borrar registro" data-toggle="modal" data-target="#confirmModal">Borrar</button>
 
                                             @include('inc.modal_confirm_del', [
                                                 'modal_id' => 'confirmModal',
                                                 'ruta_nom' => 'users_borrar',
                                             ])
+                                        @endcan
                                         </div>
 
                                         <div class="col-xs|sm|md|lg|xl-1-12">

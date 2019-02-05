@@ -17,8 +17,10 @@ return [
     |            "memcached", "redis", "array"
     |
     */
-
-    'driver' => env('SESSION_DRIVER', 'file'),
+    //por defecto >> 'file'
+    ////'driver' => env('SESSION_DRIVER', 'file'),
+    //si existe esta variable en .env, asegurarse de que esté configurada a 'database'
+    'driver' => env('SESSION_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------
