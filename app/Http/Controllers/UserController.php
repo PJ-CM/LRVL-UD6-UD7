@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
@@ -129,6 +130,9 @@ class UserController extends Controller
 
         $valor = User::findOrFail($id);
         $_arr_detalle['valor'] = $valor;
+
+        $profiles = Profile::all();
+        $_arr_detalle['profiles'] = $profiles;
 
         return view('users.mostrar')->with($_arr_detalle);
     }

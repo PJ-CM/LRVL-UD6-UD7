@@ -271,6 +271,32 @@
                                             </div>
                                         </div>
                                         --}}
+                                        <div class="form-group">
+                                            Roles
+                                            @foreach ($profiles as $role)
+                                            <div class="form-check">
+                                                @php
+                                                    $disabled = '';
+                                                    if($valor->id == 1) {
+                                                        $disabled = ' disabled';
+
+                                                    } else {
+                                                        if($role->id == 1)
+                                                            $disabled = ' disabled';
+                                                    }
+                                                @endphp
+                                                <input class="form-check-input" type="checkbox" value="" id="invalidCheck"{{ $disabled }}@if($valor->profiles->contains($role))
+                                                {{ ' checked' }}
+                                                @endif>
+                                                <label class="form-check-label" for="invalidCheck">
+                                                    {{ $role->nombre }}
+                                                </label>
+                                                <div class="invalid-feedback">
+                                                    You must agree before submitting.
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        </div>
                                         <div class="form-group text-right">
                                             <a href="{{ route('users_lista') }}" title="Volver al listado" class="mr-3">Volver al listado</a>
 

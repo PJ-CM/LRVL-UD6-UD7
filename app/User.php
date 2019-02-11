@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Post;
+use App\Profile;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -36,5 +37,14 @@ class User extends Authenticatable
      */
     public function posts() {
         return $this->hasMany(Post::class);
+    }
+
+    /**
+     * A un user se le pueden asignar (puede pertenecer a) uno o más profiles
+     *
+     * @return void
+     */
+    public function profiles() {
+        return $this->belongsToMany(Profile::class);
     }
 }

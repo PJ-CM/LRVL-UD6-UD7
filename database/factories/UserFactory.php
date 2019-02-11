@@ -25,7 +25,6 @@ use Faker\Generator as Faker;
 //definirla dentro del propio Faker para que pueda ser accesible
 
 $factory->define(User::class, function (Faker $faker) {
-    $_arr_perfil = ['author','user'];
 
     return [
         'name' => $faker->name,
@@ -38,17 +37,6 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-
-        //posibles ('admin','author','user')
-        //Opciones de este FAKER
-        //  >> NO funciona(n)
-        //  ---------------------------------------------------------------------
-        //'perfil' => $faker->randomElement('author','user'),
-        //'perfil' => $faker->randomElement($array = array('author','user')),
-        //  >> SI funciona(n)
-        //  ---------------------------------------------------------------------
-        ////'perfil' => $faker->randomElement(array('author','user')),
-        'perfil' => $faker->randomElement($_arr_perfil),
 
         'remember_token' => str_random(10),
 

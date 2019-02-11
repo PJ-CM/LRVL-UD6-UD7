@@ -13,7 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        //Para la creación de perfiles
+        $this->call(ProfilesTableSeeder::class);
 
         //Como Post depende de User:
         //  -> primero, se crean los users
@@ -27,5 +28,8 @@ class DatabaseSeeder extends Seeder
 
         //Para la creación de posts
         factory(Post::class, 74)->create();
+
+        //Para la creación de registros em profile_user
+        $this->call(ProfileUserTableSeeder::class);
     }
 }

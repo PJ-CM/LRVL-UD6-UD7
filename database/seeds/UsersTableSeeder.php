@@ -36,9 +36,6 @@ class UsersTableSeeder extends Seeder
                     'email_verified_at' => now(),
                     'password' => Hash::make('admin'),
 
-                    //posibles ('admin','author','user')
-                    'perfil' => 'admin',
-
                     'remember_token' => str_random(10),
 
                     'activo' => 1,
@@ -60,9 +57,6 @@ class UsersTableSeeder extends Seeder
                     'email_verified_at' => now(),
                     'password' => Hash::make('xxxxxx'),
 
-                    //posibles ('admin','author','user')
-                    'perfil' => 'author',
-
                     'remember_token' => str_random(10),
 
                     'activo' => 1,
@@ -83,9 +77,6 @@ class UsersTableSeeder extends Seeder
                     'email' => 'usu@gmail.com',
                     'email_verified_at' => now(),
                     'password' => Hash::make('xxxxxx'),
-
-                    //posibles ('admin','author','user')
-                    'perfil' => 'user',
 
                     'remember_token' => str_random(10),
 
